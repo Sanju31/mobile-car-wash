@@ -2349,7 +2349,9 @@
   /* =========================================
      SAVE BOOKING TO SUPABASE
   ========================================== */
-
+  console.log("DATE:", booking.dateValue);
+  console.log("SUPABASE URL:", SUPABASE_URL);
+  console.log("BOOKING:", booking);
   const { data, error } =
     await supabaseClient
       .from("bookings")
