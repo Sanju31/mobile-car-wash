@@ -2381,20 +2381,22 @@
      CHECK FOR ERROR
   ========================================== */
 
-  if (error) {
+ if (error) {
 
-    console.error(
-      "Booking creation failed:",
-      error
-    );
+  console.error(
+    "Booking creation failed:",
+    JSON.stringify(error, null, 2)
+  );
 
-    alert(
-      "Sorry, we could not create your booking. Please try again."
-    );
+  alert(
+    "ERROR CODE: " + error.code +
+    "\nMESSAGE: " + error.message +
+    "\nDETAILS: " + error.details
+  );
 
-    return;
+  return;
 
-  }
+}
 
 
   /* =========================================
