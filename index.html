@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,8 +19,14 @@
       color: #171717;
     }
 
-    button {
+    button,
+    input,
+    textarea {
       font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     .app {
@@ -63,7 +70,7 @@
       border: 1px solid #e5e5e5;
       background: white;
       border-radius: 10px;
-      font-size: 20px;
+      font-size: 22px;
       cursor: pointer;
     }
 
@@ -87,12 +94,23 @@
       color: white;
       font-size: 15px;
       font-weight: 700;
-      cursor: pointer;
     }
 
     .primary-button:disabled {
       background: #cccccc;
       cursor: not-allowed;
+    }
+
+    .secondary-button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #dddddd;
+      border-radius: 11px;
+      background: white;
+      color: #111;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
     }
 
     .bottom-action {
@@ -191,7 +209,6 @@
       border-radius: 10px;
       font-size: 15px;
       font-weight: 700;
-      cursor: pointer;
     }
 
     .section {
@@ -345,7 +362,7 @@
     }
 
     /* =========================
-       VEHICLE SELECTION
+       SELECTION CARDS
     ========================= */
 
     .selection-card {
@@ -365,20 +382,24 @@
       background: #f7f7f7;
     }
 
-    .selection-card .radio {
+    .selection-card .radio,
+    .large-service-card .radio {
       width: 22px;
       height: 22px;
       border: 2px solid #bbb;
       border-radius: 50%;
       margin-left: auto;
       position: relative;
+      flex-shrink: 0;
     }
 
-    .selection-card.selected .radio {
+    .selection-card.selected .radio,
+    .large-service-card.selected .radio {
       border-color: #111;
     }
 
-    .selection-card.selected .radio::after {
+    .selection-card.selected .radio::after,
+    .large-service-card.selected .radio::after {
       content: "";
       position: absolute;
       width: 10px;
@@ -445,6 +466,78 @@
       margin-top: 12px;
       font-size: 17px;
       font-weight: 700;
+    }
+
+    /* =========================
+       LOCATION
+    ========================= */
+
+    .gps-button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #dddddd;
+      border-radius: 11px;
+      background: #f7f7f7;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .map-placeholder {
+      height: 150px;
+      background:
+        linear-gradient(
+          135deg,
+          #eef0f2 25%,
+          #e3e6e9 25%,
+          #e3e6e9 50%,
+          #eef0f2 50%,
+          #eef0f2 75%,
+          #e3e6e9 75%
+        );
+      background-size: 35px 35px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+    }
+
+    .map-pin {
+      font-size: 42px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 14px;
+      outline: none;
+      background: white;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: #111;
+    }
+
+    .form-textarea {
+      min-height: 80px;
+      resize: vertical;
     }
 
     /* =========================
@@ -525,6 +618,14 @@
     .summary-value {
       font-size: 15px;
       font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .summary-small {
+      font-size: 12px;
+      color: #777;
+      margin-top: 4px;
+      line-height: 1.5;
     }
 
     .price-row {
@@ -589,10 +690,6 @@
       margin-top: 5px;
     }
 
-    /* =========================
-       RESPONSIVE
-    ========================= */
-
     @media (min-width: 700px) {
       body {
         background: #e9eaec;
@@ -617,7 +714,7 @@
 <div class="app">
 
   <!-- =====================================================
-       HOME SCREEN
+       HOME
   ====================================================== -->
 
   <section id="homeScreen" class="screen active">
@@ -628,16 +725,25 @@
     </div>
 
     <div class="location">
+
       <div class="location-icon">📍</div>
 
       <div class="location-text">
-        <div class="location-label">WASH LOCATION</div>
-        <div class="location-address">Coimbatore</div>
+
+        <div class="location-label">
+          WASH LOCATION
+        </div>
+
+        <div class="location-address" id="homeLocation">
+          Coimbatore
+        </div>
+
       </div>
 
       <div class="change-location">
         Change
       </div>
+
     </div>
 
     <div class="hero">
@@ -645,8 +751,8 @@
       <h2>Car wash at your doorstep.</h2>
 
       <p>
-        Book a professional car wash and our service partner
-        will come to your location.
+        Book a professional car wash and our service
+        partner will come to your location.
       </p>
 
       <button class="book-button" onclick="startBooking()">
@@ -658,13 +764,22 @@
     <div class="section">
 
       <div class="section-header">
-        <div class="section-title">Your Vehicle</div>
-        <div class="see-all">Manage</div>
+
+        <div class="section-title">
+          Your Vehicle
+        </div>
+
+        <div class="see-all">
+          Manage
+        </div>
+
       </div>
 
       <div class="vehicle-card">
 
-        <div class="car-icon">🚗</div>
+        <div class="car-icon">
+          🚗
+        </div>
 
         <div class="vehicle-info">
 
@@ -678,7 +793,9 @@
 
         </div>
 
-        <div>›</div>
+        <div>
+          ›
+        </div>
 
       </div>
 
@@ -687,28 +804,65 @@
     <div class="section">
 
       <div class="section-header">
-        <div class="section-title">Our Services</div>
-        <div class="see-all">View all</div>
+
+        <div class="section-title">
+          Our Services
+        </div>
+
+        <div class="see-all">
+          View all
+        </div>
+
       </div>
 
       <div class="services">
 
         <div class="service-card">
-          <div class="service-icon">🚿</div>
-          <div class="service-name">Basic Wash</div>
-          <div class="service-price">From ₹299</div>
+
+          <div class="service-icon">
+            🚿
+          </div>
+
+          <div class="service-name">
+            Basic Wash
+          </div>
+
+          <div class="service-price">
+            From ₹299
+          </div>
+
         </div>
 
         <div class="service-card">
-          <div class="service-icon">✨</div>
-          <div class="service-name">Full Wash</div>
-          <div class="service-price">From ₹499</div>
+
+          <div class="service-icon">
+            ✨
+          </div>
+
+          <div class="service-name">
+            Full Wash
+          </div>
+
+          <div class="service-price">
+            From ₹499
+          </div>
+
         </div>
 
         <div class="service-card">
-          <div class="service-icon">💎</div>
-          <div class="service-name">Premium</div>
-          <div class="service-price">From ₹999</div>
+
+          <div class="service-icon">
+            💎
+          </div>
+
+          <div class="service-name">
+            Premium
+          </div>
+
+          <div class="service-price">
+            From ₹999
+          </div>
+
         </div>
 
       </div>
@@ -718,13 +872,17 @@
     <div class="section">
 
       <div class="section-header">
-        <div class="section-title">Upcoming Booking</div>
+
+        <div class="section-title">
+          Upcoming Booking
+        </div>
+
       </div>
 
       <div class="booking-card">
 
         <div class="booking-status">
-          CONFIRMED
+          NO ACTIVE BOOKING
         </div>
 
         <div class="booking-service">
@@ -767,7 +925,7 @@
 
 
   <!-- =====================================================
-       STEP 1 - VEHICLE
+       VEHICLE
   ====================================================== -->
 
   <section id="vehicleScreen" class="screen">
@@ -776,26 +934,40 @@
 
       <div class="screen-header">
 
-        <button class="back-button" onclick="showScreen('homeScreen')">
+        <button
+          class="back-button"
+          onclick="showScreen('homeScreen')">
           ‹
         </button>
 
         <div>
-          <div class="screen-title">Select Vehicle</div>
+
+          <div class="screen-title">
+            Select Vehicle
+          </div>
+
           <div class="screen-subtitle">
             Which vehicle should we wash?
           </div>
+
         </div>
 
       </div>
 
+
       <div
         class="selection-card"
         id="vehicle1"
-        onclick="selectVehicle('Hyundai Creta', 'TN 38 AB 1234', 'vehicle1')"
+        onclick="selectVehicle(
+          'Hyundai Creta',
+          'TN 38 AB 1234',
+          'vehicle1'
+        )"
       >
 
-        <div class="car-icon">🚗</div>
+        <div class="car-icon">
+          🚗
+        </div>
 
         <div class="vehicle-info">
 
@@ -813,13 +985,20 @@
 
       </div>
 
+
       <div
         class="selection-card"
         id="vehicle2"
-        onclick="selectVehicle('Toyota Innova', 'TN 38 CD 5678', 'vehicle2')"
+        onclick="selectVehicle(
+          'Toyota Innova',
+          'TN 38 CD 5678',
+          'vehicle2'
+        )"
       >
 
-        <div class="car-icon">🚙</div>
+        <div class="car-icon">
+          🚙
+        </div>
 
         <div class="vehicle-info">
 
@@ -837,10 +1016,9 @@
 
       </div>
 
+
       <div class="selection-card add-vehicle">
-
         + Add Another Vehicle
-
       </div>
 
     </div>
@@ -862,7 +1040,7 @@
 
 
   <!-- =====================================================
-       STEP 2 - SERVICE
+       SERVICE
   ====================================================== -->
 
   <section id="serviceScreen" class="screen">
@@ -873,24 +1051,34 @@
 
         <button
           class="back-button"
-          onclick="showScreen('vehicleScreen')"
-        >
+          onclick="showScreen('vehicleScreen')">
           ‹
         </button>
 
         <div>
-          <div class="screen-title">Choose Service</div>
+
+          <div class="screen-title">
+            Choose Service
+          </div>
+
           <div class="screen-subtitle">
             Select the wash you need
           </div>
+
         </div>
 
       </div>
 
+
       <div
         class="large-service-card"
         id="service1"
-        onclick="selectService('Basic Wash', 299, 'Exterior wash and basic cleaning', 'service1')"
+        onclick="selectService(
+          'Basic Wash',
+          299,
+          'Exterior wash and basic cleaning',
+          'service1'
+        )"
       >
 
         <div class="service-top">
@@ -925,7 +1113,12 @@
       <div
         class="large-service-card"
         id="service2"
-        onclick="selectService('Full Car Wash', 499, 'Exterior + interior cleaning', 'service2')"
+        onclick="selectService(
+          'Full Car Wash',
+          499,
+          'Exterior + interior cleaning',
+          'service2'
+        )"
       >
 
         <div class="service-top">
@@ -960,7 +1153,12 @@
       <div
         class="large-service-card"
         id="service3"
-        onclick="selectService('Premium Detail', 999, 'Deep cleaning and premium detailing', 'service3')"
+        onclick="selectService(
+          'Premium Detail',
+          999,
+          'Deep cleaning and premium detailing',
+          'service3'
+        )"
       >
 
         <div class="service-top">
@@ -999,6 +1197,135 @@
         id="serviceNext"
         class="primary-button"
         disabled
+        onclick="goToLocation()"
+      >
+        Continue
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       LOCATION
+  ====================================================== -->
+
+  <section id="locationScreen" class="screen">
+
+    <div class="screen-content">
+
+      <div class="screen-header">
+
+        <button
+          class="back-button"
+          onclick="showScreen('serviceScreen')">
+          ‹
+        </button>
+
+        <div>
+
+          <div class="screen-title">
+            Wash Location
+          </div>
+
+          <div class="screen-subtitle">
+            Where should our team come?
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="map-placeholder">
+        <div class="map-pin">📍</div>
+      </div>
+
+
+      <button
+        class="gps-button"
+        onclick="useCurrentLocation()"
+      >
+        📍 Use My Current Location
+      </button>
+
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Full Address *
+        </label>
+
+        <textarea
+          id="addressInput"
+          class="form-textarea"
+          placeholder="House / flat number, street name, building name..."
+          oninput="checkLocationForm()"
+        ></textarea>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Area / Locality *
+        </label>
+
+        <input
+          id="areaInput"
+          class="form-input"
+          type="text"
+          placeholder="Example: Peelamedu"
+          oninput="checkLocationForm()"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Landmark
+        </label>
+
+        <input
+          id="landmarkInput"
+          class="form-input"
+          type="text"
+          placeholder="Example: Near PSG Tech"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Contact Number *
+        </label>
+
+        <input
+          id="phoneInput"
+          class="form-input"
+          type="tel"
+          placeholder="10-digit mobile number"
+          maxlength="10"
+          oninput="checkLocationForm()"
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="bottom-action">
+
+      <button
+        id="locationNext"
+        class="primary-button"
+        disabled
         onclick="goToDateTime()"
       >
         Continue
@@ -1010,7 +1337,7 @@
 
 
   <!-- =====================================================
-       STEP 3 - DATE & TIME
+       DATE & TIME
   ====================================================== -->
 
   <section id="dateTimeScreen" class="screen">
@@ -1021,106 +1348,177 @@
 
         <button
           class="back-button"
-          onclick="showScreen('serviceScreen')"
-        >
+          onclick="showScreen('locationScreen')">
           ‹
         </button>
 
         <div>
-          <div class="screen-title">Date & Time</div>
+
+          <div class="screen-title">
+            Date & Time
+          </div>
+
           <div class="screen-subtitle">
             Choose when we should visit
           </div>
+
         </div>
 
       </div>
 
-      <div class="section-title" style="margin-bottom:12px;">
+
+      <div
+        class="section-title"
+        style="margin-bottom:12px;"
+      >
         Select Date
       </div>
+
 
       <div class="date-grid">
 
         <div
           class="date-option"
           id="date1"
-          onclick="selectDate('Today', '30 Sep', 'date1')"
+          onclick="selectDate(
+            'Today',
+            '30 Sep',
+            'date1'
+          )"
         >
-          <div class="date-day">TODAY</div>
-          <div class="date-number">30</div>
+
+          <div class="date-day">
+            TODAY
+          </div>
+
+          <div class="date-number">
+            30
+          </div>
+
         </div>
+
 
         <div
           class="date-option"
           id="date2"
-          onclick="selectDate('Tomorrow', '1 Oct', 'date2')"
+          onclick="selectDate(
+            'Tomorrow',
+            '1 Oct',
+            'date2'
+          )"
         >
-          <div class="date-day">THU</div>
-          <div class="date-number">1</div>
+
+          <div class="date-day">
+            THU
+          </div>
+
+          <div class="date-number">
+            1
+          </div>
+
         </div>
+
 
         <div
           class="date-option"
           id="date3"
-          onclick="selectDate('Friday', '2 Oct', 'date3')"
+          onclick="selectDate(
+            'Friday',
+            '2 Oct',
+            'date3'
+          )"
         >
-          <div class="date-day">FRI</div>
-          <div class="date-number">2</div>
+
+          <div class="date-day">
+            FRI
+          </div>
+
+          <div class="date-number">
+            2
+          </div>
+
         </div>
 
       </div>
 
 
-      <div class="section-title" style="margin-bottom:12px;">
+      <div
+        class="section-title"
+        style="margin-bottom:12px;"
+      >
         Select Time
       </div>
+
 
       <div class="time-grid">
 
         <div
           class="time-option"
           id="time1"
-          onclick="selectTime('09:00 AM – 10:00 AM', 'time1')"
+          onclick="selectTime(
+            '09:00 AM – 10:00 AM',
+            'time1'
+          )"
         >
           09:00 AM – 10:00 AM
         </div>
 
+
         <div
           class="time-option"
           id="time2"
-          onclick="selectTime('10:00 AM – 11:00 AM', 'time2')"
+          onclick="selectTime(
+            '10:00 AM – 11:00 AM',
+            'time2'
+          )"
         >
           10:00 AM – 11:00 AM
         </div>
 
+
         <div
           class="time-option"
           id="time3"
-          onclick="selectTime('11:00 AM – 12:00 PM', 'time3')"
+          onclick="selectTime(
+            '11:00 AM – 12:00 PM',
+            'time3'
+          )"
         >
           11:00 AM – 12:00 PM
         </div>
 
+
         <div
           class="time-option"
           id="time4"
-          onclick="selectTime('02:00 PM – 03:00 PM', 'time4')"
+          onclick="selectTime(
+            '02:00 PM – 03:00 PM',
+            'time4'
+          )"
         >
           02:00 PM – 03:00 PM
         </div>
 
+
         <div
           class="time-option"
           id="time5"
-          onclick="selectTime('04:00 PM – 05:00 PM', 'time5')"
+          onclick="selectTime(
+            '04:00 PM – 05:00 PM',
+            'time5'
+          )"
         >
           04:00 PM – 05:00 PM
         </div>
 
+
         <div
           class="time-option"
           id="time6"
-          onclick="selectTime('06:00 PM – 07:00 PM', 'time6')"
+          onclick="selectTime(
+            '06:00 PM – 07:00 PM',
+            'time6'
+          )"
         >
           06:00 PM – 07:00 PM
         </div>
@@ -1128,6 +1526,7 @@
       </div>
 
     </div>
+
 
     <div class="bottom-action">
 
@@ -1146,7 +1545,7 @@
 
 
   <!-- =====================================================
-       STEP 4 - SUMMARY
+       SUMMARY
   ====================================================== -->
 
   <section id="summaryScreen" class="screen">
@@ -1157,16 +1556,20 @@
 
         <button
           class="back-button"
-          onclick="showScreen('dateTimeScreen')"
-        >
+          onclick="showScreen('dateTimeScreen')">
           ‹
         </button>
 
         <div>
-          <div class="screen-title">Review Booking</div>
+
+          <div class="screen-title">
+            Review Booking
+          </div>
+
           <div class="screen-subtitle">
             Check your booking details
           </div>
+
         </div>
 
       </div>
@@ -1178,7 +1581,10 @@
           Vehicle
         </div>
 
-        <div class="summary-value" id="summaryVehicle">
+        <div
+          class="summary-value"
+          id="summaryVehicle"
+        >
           -
         </div>
 
@@ -1191,7 +1597,10 @@
           Service
         </div>
 
-        <div class="summary-value" id="summaryService">
+        <div
+          class="summary-value"
+          id="summaryService"
+        >
           -
         </div>
 
@@ -1206,9 +1615,15 @@
 
         <div class="summary-value">
 
-          <span id="summaryDate">-</span><br>
+          <span id="summaryDate">
+            -
+          </span>
 
-          <span id="summaryTime">-</span>
+          <br>
+
+          <span id="summaryTime">
+            -
+          </span>
 
         </div>
 
@@ -1218,15 +1633,34 @@
       <div class="summary-card">
 
         <div class="summary-label">
-          Service Location
+          Wash Location
         </div>
 
-        <div class="summary-value">
-          📍 Coimbatore
+        <div
+          class="summary-value"
+          id="summaryAddress"
+        >
+          -
         </div>
 
-        <div style="font-size:12px;color:#777;margin-top:5px;">
-          Location details will be added in the next version.
+        <div
+          class="summary-small"
+          id="summaryArea"
+        >
+          -
+        </div>
+
+        <div
+          class="summary-small"
+          id="summaryLandmark"
+        >
+        </div>
+
+        <div
+          class="summary-small"
+          id="summaryPhone"
+        >
+          -
         </div>
 
       </div>
@@ -1278,6 +1712,7 @@
 
     </div>
 
+
     <div class="bottom-action">
 
       <button
@@ -1293,7 +1728,7 @@
 
 
   <!-- =====================================================
-       STEP 5 - CONFIRMATION
+       CONFIRMATION
   ====================================================== -->
 
   <section id="confirmationScreen" class="screen">
@@ -1304,7 +1739,9 @@
         ✓
       </div>
 
-      <h1>Booking Confirmed!</h1>
+      <h1>
+        Booking Confirmed!
+      </h1>
 
       <p>
         Your doorstep car wash request has been
@@ -1323,27 +1760,40 @@
       </div>
 
 
-      <div class="summary-card" style="text-align:left;">
+      <div
+        class="summary-card"
+        style="text-align:left;"
+      >
 
         <div class="summary-label">
           Vehicle
         </div>
 
-        <div class="summary-value" id="confirmationVehicle">
+        <div
+          class="summary-value"
+          id="confirmationVehicle"
+        >
           -
         </div>
 
+
         <br>
+
 
         <div class="summary-label">
           Service
         </div>
 
-        <div class="summary-value" id="confirmationService">
+        <div
+          class="summary-value"
+          id="confirmationService"
+        >
           -
         </div>
 
+
         <br>
+
 
         <div class="summary-label">
           Appointment
@@ -1351,32 +1801,68 @@
 
         <div class="summary-value">
 
-          <span id="confirmationDate">-</span><br>
+          <span id="confirmationDate">
+            -
+          </span>
 
-          <span id="confirmationTime">-</span>
+          <br>
+
+          <span id="confirmationTime">
+            -
+          </span>
 
         </div>
+
 
         <br>
 
+
         <div class="summary-label">
-          Location
+          Wash Location
         </div>
 
-        <div class="summary-value">
-          📍 Coimbatore
+        <div
+          class="summary-value"
+          id="confirmationAddress"
+        >
+          -
+        </div>
+
+        <div
+          class="summary-small"
+          id="confirmationArea"
+        >
+          -
+        </div>
+
+
+        <br>
+
+
+        <div class="summary-label">
+          Contact
+        </div>
+
+        <div
+          class="summary-value"
+          id="confirmationPhone"
+        >
+          -
         </div>
 
       </div>
 
 
       <p style="margin-top:20px;">
+
         Nearby car-wash partners will receive your
-        service request. A partner will accept the
-        booking and your service will be scheduled.
+        service request. A partner can accept or
+        reject the job.
+
       </p>
 
     </div>
+
 
     <div class="bottom-action">
 
@@ -1401,15 +1887,25 @@
   ====================================================== */
 
   const booking = {
+
     vehicleName: "",
     vehicleNumber: "",
+
     serviceName: "",
     servicePrice: 0,
     serviceDescription: "",
+
+    address: "",
+    area: "",
+    landmark: "",
+    phone: "",
+
     dateLabel: "",
     dateValue: "",
     time: "",
+
     bookingId: ""
+
   };
 
 
@@ -1419,16 +1915,23 @@
 
   function showScreen(screenId) {
 
-    document.querySelectorAll(".screen").forEach(function(screen) {
-      screen.classList.remove("active");
-    });
+    document
+      .querySelectorAll(".screen")
+      .forEach(function(screen) {
 
-    document.getElementById(screenId).classList.add("active");
+        screen.classList.remove("active");
+
+      });
+
+    document
+      .getElementById(screenId)
+      .classList.add("active");
 
     window.scrollTo({
       top: 0,
       behavior: "smooth"
     });
+
   }
 
 
@@ -1447,19 +1950,35 @@
      VEHICLE
   ====================================================== */
 
-  function selectVehicle(name, number, elementId) {
+  function selectVehicle(
+    name,
+    number,
+    elementId
+  ) {
 
-    document.querySelectorAll("#vehicleScreen .selection-card")
+    document
+      .querySelectorAll(
+        "#vehicleScreen .selection-card"
+      )
       .forEach(function(card) {
+
         card.classList.remove("selected");
+
       });
 
-    document.getElementById(elementId).classList.add("selected");
+
+    document
+      .getElementById(elementId)
+      .classList.add("selected");
+
 
     booking.vehicleName = name;
     booking.vehicleNumber = number;
 
-    document.getElementById("vehicleNext").disabled = false;
+
+    document
+      .getElementById("vehicleNext")
+      .disabled = false;
 
   }
 
@@ -1479,81 +1998,79 @@
      SERVICE
   ====================================================== */
 
-  function selectService(name, price, description, elementId) {
+  function selectService(
+    name,
+    price,
+    description,
+    elementId
+  ) {
 
-    document.querySelectorAll(".large-service-card")
+    document
+      .querySelectorAll(".large-service-card")
       .forEach(function(card) {
+
         card.classList.remove("selected");
+
       });
 
-    document.getElementById(elementId).classList.add("selected");
+
+    document
+      .getElementById(elementId)
+      .classList.add("selected");
+
 
     booking.serviceName = name;
     booking.servicePrice = price;
     booking.serviceDescription = description;
 
-    document.getElementById("serviceNext").disabled = false;
+
+    document
+      .getElementById("serviceNext")
+      .disabled = false;
 
   }
 
 
-  function goToDateTime() {
+  function goToLocation() {
 
     if (!booking.serviceName) {
       return;
     }
 
-    showScreen("dateTimeScreen");
+    showScreen("locationScreen");
 
   }
 
 
   /* =====================================================
-     DATE
+     LOCATION
   ====================================================== */
 
-  function selectDate(label, value, elementId) {
+  function checkLocationForm() {
 
-    document.querySelectorAll(".date-option")
-      .forEach(function(option) {
-        option.classList.remove("selected");
-      });
+    const address =
+      document.getElementById("addressInput").value.trim();
 
-    document.getElementById(elementId).classList.add("selected");
+    const area =
+      document.getElementById("areaInput").value.trim();
 
-    booking.dateLabel = label;
-    booking.dateValue = value;
-
-    updateDateTimeButton();
-
-  }
+    const phone =
+      document.getElementById("phoneInput").value.trim();
 
 
-  /* =====================================================
-     TIME
-  ====================================================== */
-
-  function selectTime(time, elementId) {
-
-    document.querySelectorAll(".time-option")
-      .forEach(function(option) {
-        option.classList.remove("selected");
-      });
-
-    document.getElementById(elementId).classList.add("selected");
-
-    booking.time = time;
-
-    updateDateTimeButton();
-
-  }
+    const validPhone =
+      /^[0-9]{10}$/.test(phone);
 
 
-  function updateDateTimeButton() {
+    const button =
+      document.getElementById("locationNext");
 
-    const button = document.getElementById("dateTimeNext");
 
-    if (booking.dateValue && booking.time) {
+    if (
+      address &&
+      area &&
+      validPhone
+    ) {
 
       button.disabled = false;
 
@@ -1566,35 +2083,241 @@
   }
 
 
-  function goToSummary() {
+  function useCurrentLocation() {
 
-    if (!booking.dateValue || !booking.time) {
-      return;
+    const addressInput =
+      document.getElementById("addressInput");
+
+    const areaInput =
+      document.getElementById("areaInput");
+
+
+    addressInput.value =
+      "Current location selected";
+
+
+    areaInput.value =
+      "Coimbatore";
+
+
+    checkLocationForm();
+
+    alert(
+      "For the prototype, your location has been set to Coimbatore. Real GPS/Maps integration will be added later."
+    );
+
+  }
+
+
+  function saveLocation() {
+
+    booking.address =
+      document
+        .getElementById("addressInput")
+        .value
+        .trim();
+
+    booking.area =
+      document
+        .getElementById("areaInput")
+        .value
+        .trim();
+
+    booking.landmark =
+      document
+        .getElementById("landmarkInput")
+        .value
+        .trim();
+
+    booking.phone =
+      document
+        .getElementById("phoneInput")
+        .value
+        .trim();
+
+  }
+
+
+  /* =====================================================
+     DATE & TIME
+  ====================================================== */
+
+  function goToDateTime() {
+
+    saveLocation();
+
+    showScreen("dateTimeScreen");
+
+  }
+
+
+  function selectDate(
+    label,
+    value,
+    elementId
+  ) {
+
+    document
+      .querySelectorAll(".date-option")
+      .forEach(function(option) {
+
+        option.classList.remove("selected");
+
+      });
+
+
+    document
+      .getElementById(elementId)
+      .classList.add("selected");
+
+
+    booking.dateLabel = label;
+    booking.dateValue = value;
+
+
+    updateDateTimeButton();
+
+  }
+
+
+  function selectTime(
+    time,
+    elementId
+  ) {
+
+    document
+      .querySelectorAll(".time-option")
+      .forEach(function(option) {
+
+        option.classList.remove("selected");
+
+      });
+
+
+    document
+      .getElementById(elementId)
+      .classList.add("selected");
+
+
+    booking.time = time;
+
+
+    updateDateTimeButton();
+
+  }
+
+
+  function updateDateTimeButton() {
+
+    const button =
+      document.getElementById("dateTimeNext");
+
+
+    if (
+      booking.dateValue &&
+      booking.time
+    ) {
+
+      button.disabled = false;
+
+    } else {
+
+      button.disabled = true;
+
     }
 
-    document.getElementById("summaryVehicle").innerHTML =
-      booking.vehicleName + "<br>" +
-      "<span style='font-size:12px;color:#777'>" +
-      booking.vehicleNumber +
-      "</span>";
+  }
 
-    document.getElementById("summaryService").textContent =
-      booking.serviceName;
 
-    document.getElementById("summaryDate").textContent =
-      booking.dateLabel + " • " + booking.dateValue;
+  /* =====================================================
+     SUMMARY
+  ====================================================== */
 
-    document.getElementById("summaryTime").textContent =
-      booking.time;
+  function goToSummary() {
 
-    document.getElementById("summaryServiceName").textContent =
-      booking.serviceName;
+    if (
+      !booking.dateValue ||
+      !booking.time
+    ) {
 
-    document.getElementById("summaryPrice").textContent =
-      "₹" + booking.servicePrice;
+      return;
 
-    document.getElementById("summaryTotal").textContent =
-      "₹" + booking.servicePrice;
+    }
+
+
+    document
+      .getElementById("summaryVehicle")
+      .innerHTML =
+        booking.vehicleName +
+        "<br>" +
+        "<span style='font-size:12px;color:#777'>" +
+        booking.vehicleNumber +
+        "</span>";
+
+
+    document
+      .getElementById("summaryService")
+      .textContent =
+        booking.serviceName;
+
+
+    document
+      .getElementById("summaryDate")
+      .textContent =
+        booking.dateLabel +
+        " • " +
+        booking.dateValue;
+
+
+    document
+      .getElementById("summaryTime")
+      .textContent =
+        booking.time;
+
+
+    document
+      .getElementById("summaryAddress")
+      .textContent =
+        booking.address;
+
+
+    document
+      .getElementById("summaryArea")
+      .textContent =
+        booking.area;
+
+
+    document
+      .getElementById("summaryLandmark")
+      .textContent =
+        booking.landmark
+          ? "Landmark: " + booking.landmark
+          : "";
+
+
+    document
+      .getElementById("summaryPhone")
+      .textContent =
+        "Contact: " + booking.phone;
+
+
+    document
+      .getElementById("summaryServiceName")
+      .textContent =
+        booking.serviceName;
+
+
+    document
+      .getElementById("summaryPrice")
+      .textContent =
+        "₹" + booking.servicePrice;
+
+
+    document
+      .getElementById("summaryTotal")
+      .textContent =
+        "₹" + booking.servicePrice;
+
 
     showScreen("summaryScreen");
 
@@ -1609,25 +2332,70 @@
 
     booking.bookingId =
       "CW-" +
-      Math.floor(10000 + Math.random() * 90000);
+      Math.floor(
+        10000 +
+        Math.random() * 90000
+      );
 
-    document.getElementById("bookingId").textContent =
-      booking.bookingId;
 
-    document.getElementById("confirmationVehicle").innerHTML =
-      booking.vehicleName + "<br>" +
-      "<span style='font-size:12px;color:#777'>" +
-      booking.vehicleNumber +
-      "</span>";
+    document
+      .getElementById("bookingId")
+      .textContent =
+        booking.bookingId;
 
-    document.getElementById("confirmationService").textContent =
-      booking.serviceName;
 
-    document.getElementById("confirmationDate").textContent =
-      booking.dateLabel + " • " + booking.dateValue;
+    document
+      .getElementById("confirmationVehicle")
+      .innerHTML =
+        booking.vehicleName +
+        "<br>" +
+        "<span style='font-size:12px;color:#777'>" +
+        booking.vehicleNumber +
+        "</span>";
 
-    document.getElementById("confirmationTime").textContent =
-      booking.time;
+
+    document
+      .getElementById("confirmationService")
+      .textContent =
+        booking.serviceName;
+
+
+    document
+      .getElementById("confirmationDate")
+      .textContent =
+        booking.dateLabel +
+        " • " +
+        booking.dateValue;
+
+
+    document
+      .getElementById("confirmationTime")
+      .textContent =
+        booking.time;
+
+
+    document
+      .getElementById("confirmationAddress")
+      .textContent =
+        booking.address;
+
+
+    document
+      .getElementById("confirmationArea")
+      .textContent =
+        booking.area +
+        (
+          booking.landmark
+            ? " • " + booking.landmark
+            : ""
+        );
+
+
+    document
+      .getElementById("confirmationPhone")
+      .textContent =
+        booking.phone;
+
 
     showScreen("confirmationScreen");
 
@@ -1648,3 +2416,4 @@
 
 </body>
 </html>
+```
