@@ -2331,78 +2331,138 @@
      CONFIRM BOOKING
   ====================================================== */
 
-  function confirmBooking() {
+ async function confirmBooking() {
 
-    booking.bookingId =
-      "CW-" +
-      Math.floor(
-        10000 +
-        Math.random() * 90000
+  /* =========================================
+     GENERATE BOOKING ID
+  ========================================== */
+
+  booking.bookingId =
+    "CW-" +
+    Math.floor(
+      10000 +
+      Math.random() * 90000
+    );
+
+
+  /* =========================================
+     SAVE BOOKING TO SUPABASE
+  ========================================== */
+
+  const { data, error } =
+    await supabaseClient
+      .from("bookings")
+      .insert({
+        booking_code: booking.bookingId,
+
+        customer_name: "Customer",
+        customer_phone: booking.phone,
+
+        vehicle_name: booking.vehicleName,
+        vehicle_number: booking.vehicleNumber,
+
+        service_name: booking.serviceName,
+        service_price: booking.servicePrice,
+
+        address: booking.address,
+        area: booking.area,
+        landmark: booking.landmark,
+
+        booking_date: booking.dateValue,
+        booking_time: booking.time,
+
+        status: "PENDING"
+      })
+      .select()
+      .single();
+
+
+  /* =========================================
+     CHECK FOR ERROR
+  ========================================== */
+
+  if (error) {
+
+    console.error(
+      "Booking creation failed:",
+      error
+    );
+
+    alert(
+      "Sorry, we could not create your booking. Please try again."
+    );
+
+    return;
+
+  }
+
+
+  /* =========================================
+     DISPLAY CONFIRMATION
+  ========================================== */
+
+  document
+    .getElementById("bookingId")
+    .textContent =
+      data.booking_code;
+
+
+  document
+    .getElementById("confirmationVehicle")
+    .innerHTML =
+      booking.vehicleName +
+      "<br>" +
+      "<span style='font-size:12px;color:#777'>" +
+      booking.vehicleNumber +
+      "</span>";
+
+
+  document
+    .getElementById("confirmationService")
+    .textContent =
+      booking.serviceName;
+
+
+  document
+    .getElementById("confirmationDate")
+    .textContent =
+      booking.dateLabel +
+      " • " +
+      booking.dateValue;
+
+
+  document
+    .getElementById("confirmationTime")
+    .textContent =
+      booking.time;
+
+
+  document
+    .getElementById("confirmationAddress")
+    .textContent =
+      booking.address;
+
+
+  document
+    .getElementById("confirmationArea")
+    .textContent =
+      booking.area +
+      (
+        booking.landmark
+          ? " • " + booking.landmark
+          : ""
       );
 
 
-    document
-      .getElementById("bookingId")
-      .textContent =
-        booking.bookingId;
+  document
+    .getElementById("confirmationPhone")
+    .textContent =
+      booking.phone;
 
 
-    document
-      .getElementById("confirmationVehicle")
-      .innerHTML =
-        booking.vehicleName +
-        "<br>" +
-        "<span style='font-size:12px;color:#777'>" +
-        booking.vehicleNumber +
-        "</span>";
+  showScreen("confirmationScreen");
 
-
-    document
-      .getElementById("confirmationService")
-      .textContent =
-        booking.serviceName;
-
-
-    document
-      .getElementById("confirmationDate")
-      .textContent =
-        booking.dateLabel +
-        " • " +
-        booking.dateValue;
-
-
-    document
-      .getElementById("confirmationTime")
-      .textContent =
-        booking.time;
-
-
-    document
-      .getElementById("confirmationAddress")
-      .textContent =
-        booking.address;
-
-
-    document
-      .getElementById("confirmationArea")
-      .textContent =
-        booking.area +
-        (
-          booking.landmark
-            ? " • " + booking.landmark
-            : ""
-        );
-
-
-    document
-      .getElementById("confirmationPhone")
-      .textContent =
-        booking.phone;
-
-
-    showScreen("confirmationScreen");
-
-  }
+}
 
 
   /* =====================================================
