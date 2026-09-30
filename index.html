@@ -1,1 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarWash - Doorstep Car Wash</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6f8;
+      color: #171717;
+    }
+
+    .app {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+      padding-bottom: 80px;
+    }
+
+    /* Header */
+
+    .header {
+      padding: 22px 20px 10px;
+      background: #ffffff;
+    }
+
+    .greeting {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* Location */
+
+    .location {
+      margin: 15px 20px;
+      padding: 14px;
+      background: #f4f6f8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .location-icon {
+      font-size: 22px;
+    }
+
+    .location-text {
+      flex: 1;
+    }
+
+    .location-label {
+      font-size: 11px;
+      color: #777;
+      margin-bottom: 3px;
+    }
+
+    .location-address {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .change-location {
+      font-size: 12px;
+      font-weight: 600;
+      color: #111;
+    }
+
+    /* Main booking button */
+
+    .hero {
+      margin: 20px;
+      padding: 24px;
+      border-radius: 18px;
+      background: #111111;
+      color: white;
+    }
+
+    .hero h2 {
+      font-size: 23px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d4d4d4;
+      margin-bottom: 18px;
+    }
+
+    .book-button {
+      width: 100%;
+      border: none;
+      background: white;
+      color: #111;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Section */
+
+    .section {
+      padding: 0 20px;
+      margin-top: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .see-all {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+    }
+
+    /* Vehicle */
+
+    .vehicle-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .car-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #f1f2f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+    }
+
+    .vehicle-info {
+      flex: 1;
+    }
+
+    .vehicle-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .vehicle-number {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* Services */
+
+    .services {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .service-card {
+      min-width: 145px;
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .service-icon {
+      font-size: 27px;
+      margin-bottom: 12px;
+    }
+
+    .service-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .service-price {
+      font-size: 13px;
+      color: #777;
+    }
+
+    /* Upcoming booking */
+
+    .booking-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .booking-status {
+      display: inline-block;
+      background: #eaf7ed;
+      color: #237a35;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 9px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .booking-service {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .booking-details {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Bottom Navigation */
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 68px;
+      background: white;
+      border-top: 1px solid #e8e8e8;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #111;
+      font-weight: 700;
+    }
+
+    @media (min-width: 700px) {
+      body {
+        background: #e9eaec;
+        padding: 20px 0;
+      }
+
+      .app {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+      }
+
+      .bottom-nav {
+        border-radius: 0 0 20px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- Header -->
+
+    <div class="header">
+      <div class="greeting">Good morning</div>
+      <h1>Welcome back 👋</h1>
+    </div>
+
+
+    <!-- Location -->
+
+    <div class="location">
+
+      <div class="location-icon">📍</div>
+
+      <div class="location-text">
+        <div class="location-label">WASH LOCATION</div>
+        <div class="location-address">Coimbatore</div>
+      </div>
+
+      <div class="change-location">
+        Change
+      </div>
+
+    </div>
+
+
+    <!-- Main Booking -->
+
+    <div class="hero">
+
+      <h2>Car wash at your doorstep.</h2>
+
+      <p>
+        Book a professional car wash and our service partner
+        will come to your location.
+      </p>
+
+      <button class="book-button">
+        Book a Car Wash
+      </button>
+
+    </div>
+
+
+    <!-- Vehicle -->
+
+    <div class="section">
+
+      <div class="section-header">
+
+        <div class="section-title">
+          Your Vehicle
+        </div>
+
+        <div class="see-all">
+          Manage
+        </div>
+
+      </div>
+
+      <div class="vehicle-card">
+
+        <div class="car-icon">
+          🚗
+        </div>
+
+        <div class="vehicle-info">
+
+          <div class="vehicle-name">
+            Hyundai Creta
+          </div>
+
+          <div class="vehicle-number">
+            TN 38 AB 1234
+          </div>
+
+        </div>
+
+        <div>
+          ›
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Services -->
+
+    <div class="section">
+
+      <div class="section-header">
+
+        <div class="section-title">
+          Our Services
+        </div>
+
+        <div class="see-all">
+          View all
+        </div>
+
+      </div>
+
+      <div class="services">
+
+        <div class="service-card">
+
+          <div class="service-icon">
+            🚿
+          </div>
+
+          <div class="service-name">
+            Basic Wash
+          </div>
+
+          <div class="service-price">
+            From ₹299
+          </div>
+
+        </div>
+
+
+        <div class="service-card">
+
+          <div class="service-icon">
+            ✨
+          </div>
+
+          <div class="service-name">
+            Full Wash
+          </div>
+
+          <div class="service-price">
+            From ₹499
+          </div>
+
+        </div>
+
+
+        <div class="service-card">
+
+          <div class="service-icon">
+            💎
+          </div>
+
+          <div class="service-name">
+            Premium
+          </div>
+
+          <div class="service-price">
+            From ₹999
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Upcoming Booking -->
+
+    <div class="section">
+
+      <div class="section-header">
+
+        <div class="section-title">
+          Upcoming Booking
+        </div>
+
+      </div>
+
+      <div class="booking-card">
+
+        <div class="booking-status">
+          CONFIRMED
+        </div>
+
+        <div class="booking-service">
+          Full Car Wash
+        </div>
+
+        <div class="booking-details">
+
+          Tomorrow · 10:00 AM – 11:00 AM<br>
+
+          Hyundai Creta<br>
+
+          Coimbatore
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Bottom Navigation -->
+
+    <div class="bottom-nav">
+
+      <div class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        Home
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-icon">📅</div>
+        Bookings
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-icon">🚗</div>
+        Vehicles
+      </div>
+
+      <div class="nav-item">
+        <div class="nav-icon">👤</div>
+        Profile
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
