@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner App - Car Wash</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f5f6f8;
+      color: #171717;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 430px;
+      margin: auto;
+      min-height: 100vh;
+      background: #ffffff;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding-bottom: 85px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* LOGIN */
+
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      background: #111827;
+    }
+
+    .login-box {
+      width: 100%;
+      background: white;
+      border-radius: 22px;
+      padding: 30px 24px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: #111827;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .login-box h1 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      color: #6b7280;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      margin-bottom: 13px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .input:focus {
+      border-color: #111827;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      background: #111827;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      background: white;
+      color: #111827;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .danger-btn {
+      width: 100%;
+      border: none;
+      background: #dc2626;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .success-btn {
+      width: 100%;
+      border: none;
+      background: #15803d;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* HEADER */
+
+    .top-header {
+      padding: 22px 20px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-header h2 {
+      font-size: 21px;
+    }
+
+    .top-header p {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .profile-circle {
+      width: 42px;
+      height: 42px;
+      background: #111827;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 0 20px;
+    }
+
+    /* STATUS */
+
+    .status-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 17px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-title {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .status-subtitle {
+      color: #15803d;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .toggle {
+      width: 52px;
+      height: 29px;
+      border-radius: 20px;
+      background: #16a34a;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle.off {
+      background: #9ca3af;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 23px;
+      height: 23px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      right: 3px;
+      transition: 0.2s;
+    }
+
+    .toggle.off::after {
+      right: 26px;
+    }
+
+    /* STATS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 15px 10px;
+      text-align: center;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .stat-card span {
+      color: #6b7280;
+      font-size: 11px;
+    }
+
+    /* SECTION */
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title h3 {
+      font-size: 18px;
+    }
+
+    .section-title span {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    /* JOB CARD */
+
+    .job-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 15px;
+      background: white;
+    }
+
+    .job-top {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .job-id {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .new-badge {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .vehicle-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .service-name {
+      color: #4b5563;
+      font-size: 14px;
+    }
+
+    .job-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 13px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+
+    .job-detail-icon {
+      width: 22px;
+      flex-shrink: 0;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .job-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .reject-btn {
+      border: 1px solid #dc2626;
+      background: white;
+      color: #dc2626;
+      padding: 13px;
+      border-radius: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .accept-btn {
+      border: none;
+      background: #15803d;
+      color: white;
+      padding: 13px;
+      border-radius: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* WORKER */
+
+    .worker-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .worker-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .worker-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .worker-name {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .worker-status {
+      color: #15803d;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .worker-status.busy {
+      color: #dc2626;
+    }
+
+    .assign-btn {
+      background: #111827;
+      color: white;
+      border: none;
+      border-radius: 9px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .assign-btn:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+    }
+
+    /* ACTIVE JOB */
+
+    .active-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 18px;
+      font-size: 13px;
+    }
+
+    .tracking-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .tracking-step {
+      display: flex;
+      gap: 13px;
+      margin-bottom: 18px;
+    }
+
+    .step-dot {
+      width: 14px;
+      height: 14px;
+      background: #d1d5db;
+      border-radius: 50%;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .step-dot.completed {
+      background: #16a34a;
+    }
+
+    .step-dot.current {
+      background: #2563eb;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .step-subtitle {
+      color: #6b7280;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* EARNINGS */
+
+    .earnings-main {
+      background: #111827;
+      color: white;
+      padding: 24px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .earnings-main span {
+      color: #d1d5db;
+      font-size: 13px;
+    }
+
+    .earnings-main strong {
+      display: block;
+      font-size: 32px;
+      margin-top: 8px;
+    }
+
+    .earning-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+
+    .earning-row span {
+      color: #6b7280;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      text-align: center;
+      padding: 45px 20px;
+      color: #6b7280;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    /* NAV */
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 430px;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 9px 5px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      padding: 7px 2px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .nav-btn.active {
+      color: #111827;
+      font-weight: bold;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 3px;
+    }
+
+    /* MODAL */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px 30px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-box h2 {
+      margin-bottom: 8px;
+      font-size: 21px;
+    }
+
+    .modal-description {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .close-btn {
+      width: 100%;
+      border: none;
+      background: #f3f4f6;
+      padding: 13px;
+      border-radius: 11px;
+      margin-top: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .shop-card {
+      background: #f8fafc;
+      padding: 17px;
+      border-radius: 15px;
+      margin-bottom: 18px;
+    }
+
+    .shop-card strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .shop-card span {
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .logout {
+      margin-top: 20px;
+    }
+
+    /* TOAST */
+
+    .toast {
+      position: fixed;
+      bottom: 85px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #111827;
+      color: white;
+      padding: 13px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.3s;
+      z-index: 300;
+      width: max-content;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 600px) {
+      body {
+        background: #e5e7eb;
+      }
+
+      .app {
+        box-shadow: 0 0 30px rgba(0,0,0,0.08);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="login-screen">
+
+    <div class="login-box">
+
+      <div class="logo">CW</div>
+
+      <h1>Partner Login</h1>
+
+      <p>
+        Manage your car-wash shop, receive doorstep jobs,
+        assign workers and track your earnings.
+      </p>
+
+      <input
+        id="phoneInput"
+        class="input"
+        type="tel"
+        placeholder="Mobile number"
+        maxlength="10"
+      >
+
+      <input
+        id="passwordInput"
+        class="input"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button class="primary-btn" onclick="loginPartner()">
+        Login
+      </button>
+
+      <p style="text-align:center;margin-top:15px;font-size:12px;">
+        Prototype login — any valid-looking details will work.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- HOME -->
+  <div id="homeScreen" class="screen">
+
+    <div class="top-header">
+
+      <div>
+        <h2>Good morning 👋</h2>
+        <p>Manage your doorstep jobs</p>
+      </div>
+
+      <div class="profile-circle">
+        CW
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <!-- SHOP STATUS -->
+      <div class="status-card">
+
+        <div class="status-row">
+
+          <div>
+            <div class="status-title">
+              Doorstep Jobs
+            </div>
+
+            <div id="statusText" class="status-subtitle">
+              Online — accepting jobs
+            </div>
+          </div>
+
+          <div
+            id="statusToggle"
+            class="toggle"
+            onclick="toggleShopStatus()">
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat-card">
+          <strong id="todayJobs">3</strong>
+          <span>Today's Jobs</span>
+        </div>
+
+        <div class="stat-card">
+          <strong id="completedJobs">2</strong>
+          <span>Completed</span>
+        </div>
+
+        <div class="stat-card">
+          <strong id="todayEarnings">₹997</strong>
+          <span>Earnings</span>
+        </div>
+
+      </div>
+
+
+      <!-- NEW JOB -->
+      <div class="section-title">
+
+        <h3>New Job</h3>
+
+        <span id="jobCountText">
+          1 request
+        </span>
+
+      </div>
+
+
+      <div id="newJobCard" class="job-card">
+
+        <div class="job-top">
+
+          <div class="job-id">
+            Booking #CW-48321
+          </div>
+
+          <div class="new-badge">
+            NEW
+          </div>
+
+        </div>
+
+        <div class="vehicle-name">
+          Hyundai Creta
+        </div>
+
+        <div class="service-name">
+          Full Car Wash
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">📍</span>
+          <span>
+            2.4 km away<br>
+            24, Avinashi Road, Coimbatore
+          </span>
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">🕐</span>
+          <span>
+            Today, 10:00 AM – 11:00 AM
+          </span>
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">📞</span>
+          <span>
+            Customer: Rahul
+          </span>
+        </div>
+
+        <div class="price">
+          ₹499
+        </div>
+
+        <div class="job-actions">
+
+          <button
+            class="reject-btn"
+            onclick="rejectJob()">
+            Reject
+          </button>
+
+          <button
+            class="accept-btn"
+            onclick="acceptJob()">
+            Accept
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- SHOP INFO -->
+      <div class="section-title" style="margin-top:25px;">
+        <h3>Your Shop</h3>
+      </div>
+
+      <div class="shop-card">
+
+        <strong>Cosmo Car Wash</strong>
+
+        <span>
+          Avinashi Road, Coimbatore
+        </span>
+
+        <br><br>
+
+        <span>
+          2 workers • Doorstep service radius: 5 km
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- WORKERS -->
+  <div id="workersScreen" class="screen">
+
+    <div class="top-header">
+
+      <div>
+        <h2>Workers</h2>
+        <p>Manage your available team</p>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="section-title">
+        <h3>Your Team</h3>
+        <span>2 workers</span>
+      </div>
+
+
+      <div class="worker-card">
+
+        <div class="worker-info">
+
+          <div class="worker-avatar">
+            RK
+          </div>
+
+          <div>
+
+            <div class="worker-name">
+              Ravi Kumar
+            </div>
+
+            <div class="worker-status">
+              ● Available
+            </div>
+
+          </div>
+
+        </div>
+
+        <button class="assign-btn">
+          Available
+        </button>
+
+      </div>
+
+
+      <div class="worker-card">
+
+        <div class="worker-info">
+
+          <div class="worker-avatar">
+            SK
+          </div>
+
+          <div>
+
+            <div class="worker-name">
+              Suresh Kumar
+            </div>
+
+            <div class="worker-status busy">
+              ● Busy
+            </div>
+
+          </div>
+
+        </div>
+
+        <button
+          class="assign-btn"
+          disabled>
+          Busy
+        </button>
+
+      </div>
+
+
+      <button
+        class="secondary-btn"
+        style="margin-top:15px;"
+        onclick="showToast('Worker registration will be added later.')">
+        + Add Worker
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVE JOB -->
+  <div id="activeScreen" class="screen">
+
+    <div class="top-header">
+
+      <div>
+        <h2>Active Job</h2>
+        <p>Doorstep service in progress</p>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="active-banner">
+        🚗 Ravi is assigned to this doorstep job.
+      </div>
+
+
+      <div class="job-card">
+
+        <div class="job-top">
+
+          <div class="job-id">
+            Booking #CW-48321
+          </div>
+
+          <div class="new-badge">
+            ACTIVE
+          </div>
+
+        </div>
+
+        <div class="vehicle-name">
+          Hyundai Creta
+        </div>
+
+        <div class="service-name">
+          Full Car Wash — ₹499
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">📍</span>
+          <span>
+            24, Avinashi Road<br>
+            Coimbatore
+          </span>
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">👤</span>
+          <span>
+            Customer: Rahul
+          </span>
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">👷</span>
+          <span>
+            Assigned Worker: Ravi Kumar
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="tracking-card">
+
+        <div class="tracking-step">
+
+          <div class="step-dot completed"></div>
+
+          <div>
+            <div class="step-title">
+              Job accepted
+            </div>
+
+            <div class="step-subtitle">
+              Partner accepted the booking
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="tracking-step">
+
+          <div class="step-dot completed"></div>
+
+          <div>
+            <div class="step-title">
+              Worker assigned
+            </div>
+
+            <div class="step-subtitle">
+              Ravi Kumar
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="tracking-step">
+
+          <div
+            id="onWayDot"
+            class="step-dot current">
+          </div>
+
+          <div>
+            <div class="step-title">
+              On the way
+            </div>
+
+            <div class="step-subtitle">
+              Worker is travelling to customer
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="tracking-step">
+
+          <div
+            id="washingDot"
+            class="step-dot">
+          </div>
+
+          <div>
+            <div class="step-title">
+              Washing
+            </div>
+
+            <div class="step-subtitle">
+              Service has not started
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="tracking-step">
+
+          <div
+            id="completeDot"
+            class="step-dot">
+          </div>
+
+          <div>
+            <div class="step-title">
+              Completed
+            </div>
+
+            <div class="step-subtitle">
+              Job completion
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="startWashBtn"
+        class="primary-btn"
+        onclick="startWash()">
+        Start Washing
+      </button>
+
+      <button
+        id="completeBtn"
+        class="success-btn"
+        style="display:none;margin-top:10px;"
+        onclick="completeJob()">
+        Mark Job Completed
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- EARNINGS -->
+  <div id="earningsScreen" class="screen">
+
+    <div class="top-header">
+
+      <div>
+        <h2>Earnings</h2>
+        <p>Track your doorstep income</p>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="earnings-main">
+
+        <span>
+          This month
+        </span>
+
+        <strong id="monthlyEarnings">
+          ₹8,475
+        </strong>
+
+      </div>
+
+
+      <div class="section-title">
+        <h3>Recent Jobs</h3>
+      </div>
+
+
+      <div class="earning-row">
+
+        <div>
+          Hyundai Creta<br>
+          <span>Full Car Wash</span>
+        </div>
+
+        <strong>
+          +₹499
+        </strong>
+
+      </div>
+
+
+      <div class="earning-row">
+
+        <div>
+          Toyota Innova<br>
+          <span>Basic Wash</span>
+        </div>
+
+        <strong>
+          +₹299
+        </strong>
+
+      </div>
+
+
+      <div class="earning-row">
+
+        <div>
+          Kia Seltos<br>
+          <span>Full Car Wash</span>
+        </div>
+
+        <strong>
+          +₹499
+        </strong>
+
+      </div>
+
+
+      <button
+        class="secondary-btn"
+        style="margin-top:20px;"
+        onclick="showToast('Settlement system will be connected later.')">
+        View Settlement Details
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROFILE -->
+  <div id="profileScreen" class="screen">
+
+    <div class="top-header">
+
+      <div>
+        <h2>Shop Profile</h2>
+        <p>Manage your business information</p>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="shop-card">
+
+        <strong>Cosmo Car Wash</strong>
+
+        <span>
+          Partner ID: PT-1024
+        </span>
+
+        <br><br>
+
+        <span>
+          📍 Avinashi Road, Coimbatore
+        </span>
+
+        <br><br>
+
+        <span>
+          📞 +91 98765 43210
+        </span>
+
+        <br><br>
+
+        <span>
+          🧽 Basic • Full • Premium
+        </span>
+
+      </div>
+
+
+      <button
+        class="secondary-btn"
+        onclick="showToast('Shop editing will be added later.')">
+        Edit Shop Profile
+      </button>
+
+      <button
+        class="secondary-btn"
+        style="margin-top:10px;"
+        onclick="showToast('Service radius settings will be added later.')">
+        Service Radius
+      </button>
+
+      <button
+        class="secondary-btn"
+        style="margin-top:10px;"
+        onclick="showToast('Operating hours will be added later.')">
+        Operating Hours
+      </button>
+
+      <button
+        class="danger-btn logout"
+        onclick="logoutPartner()">
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- BOTTOM NAV -->
+  <div id="bottomNav" class="bottom-nav" style="display:none;">
+
+    <button
+      id="navHome"
+      class="nav-btn active"
+      onclick="showScreen('homeScreen', this)">
+
+      <span class="nav-icon">⌂</span>
+      Home
+
+    </button>
+
+
+    <button
+      id="navWorkers"
+      class="nav-btn"
+      onclick="showScreen('workersScreen', this)">
+
+      <span class="nav-icon">👷</span>
+      Workers
+
+    </button>
+
+
+    <button
+      id="navActive"
+      class="nav-btn"
+      onclick="showScreen('activeScreen', this)">
+
+      <span class="nav-icon">🚗</span>
+      Active
+
+    </button>
+
+
+    <button
+      id="navEarnings"
+      class="nav-btn"
+      onclick="showScreen('earningsScreen', this)">
+
+      <span class="nav-icon">₹</span>
+      Earnings
+
+    </button>
+
+  </div>
+
+
+  <!-- JOB ACCEPT MODAL -->
+  <div id="workerModal" class="modal">
+
+    <div class="modal-box">
+
+      <h2>Assign Worker</h2>
+
+      <p class="modal-description">
+        Choose an available worker to perform this doorstep
+        car-wash job.
+      </p>
+
+
+      <div class="worker-card">
+
+        <div class="worker-info">
+
+          <div class="worker-avatar">
+            RK
+          </div>
+
+          <div>
+
+            <div class="worker-name">
+              Ravi Kumar
+            </div>
+
+            <div class="worker-status">
+              ● Available
+            </div>
+
+          </div>
+
+        </div>
+
+        <button
+          class="assign-btn"
+          onclick="assignWorker('Ravi Kumar')">
+          Assign
+        </button>
+
+      </div>
+
+
+      <div class="worker-card">
+
+        <div class="worker-info">
+
+          <div class="worker-avatar">
+            SK
+          </div>
+
+          <div>
+
+            <div class="worker-name">
+              Suresh Kumar
+            </div>
+
+            <div class="worker-status busy">
+              ● Busy
+            </div>
+
+          </div>
+
+        </div>
+
+        <button
+          class="assign-btn"
+          disabled>
+          Busy
+        </button>
+
+      </div>
+
+
+      <button
+        class="close-btn"
+        onclick="closeWorkerModal()">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+</div>
+
+
+<script>
+
+  /* =========================
+     APP STATE
+  ========================= */
+
+  const partner = {
+
+    loggedIn: false,
+
+    shopOnline: true,
+
+    jobAvailable: true,
+
+    jobAccepted: false,
+
+    workerAssigned: false,
+
+    workerName: "",
+
+    washingStarted: false,
+
+    jobCompleted: false,
+
+    todayJobs: 3,
+
+    completedJobs: 2,
+
+    todayEarnings: 997,
+
+    monthlyEarnings: 8475
+
+  };
+
+
+  /* =========================
+     LOGIN
+  ========================= */
+
+  function loginPartner() {
+
+    const phone =
+      document.getElementById("phoneInput").value.trim();
+
+    const password =
+      document.getElementById("passwordInput").value.trim();
+
+    if (phone.length !== 10) {
+
+      showToast("Please enter a valid 10-digit mobile number.");
+
+      return;
+    }
+
+    if (password.length < 1) {
+
+      showToast("Please enter your password.");
+
+      return;
+    }
+
+    partner.loggedIn = true;
+
+    document.getElementById("loginScreen").style.display = "none";
+
+    document.getElementById("bottomNav").style.display = "grid";
+
+    showScreen("homeScreen", document.getElementById("navHome"));
+
+    showToast("Welcome back, Cosmo Car Wash!");
+
+  }
+
+
+  /* =========================
+     SCREEN NAVIGATION
+  ========================= */
+
+  function showScreen(screenId, navButton) {
+
+    const screens =
+      document.querySelectorAll(".screen");
+
+    screens.forEach(screen => {
+      screen.classList.remove("active");
+    });
+
+    document
+      .getElementById(screenId)
+      .classList.add("active");
+
+
+    const navButtons =
+      document.querySelectorAll(".nav-btn");
+
+    navButtons.forEach(button => {
+      button.classList.remove("active");
+    });
+
+    if (navButton) {
+      navButton.classList.add("active");
+    }
+
+  }
+
+
+  /* =========================
+     SHOP STATUS
+  ========================= */
+
+  function toggleShopStatus() {
+
+    partner.shopOnline =
+      !partner.shopOnline;
+
+    const toggle =
+      document.getElementById("statusToggle");
+
+    const text =
+      document.getElementById("statusText");
+
+    if (partner.shopOnline) {
+
+      toggle.classList.remove("off");
+
+      text.textContent =
+        "Online — accepting jobs";
+
+      text.style.color =
+        "#15803d";
+
+      showToast(
+        "Your shop is now accepting doorstep jobs."
+      );
+
+    } else {
+
+      toggle.classList.add("off");
+
+      text.textContent =
+        "Paused — not accepting jobs";
+
+      text.style.color =
+        "#dc2626";
+
+      showToast(
+        "Doorstep job requests are paused."
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     ACCEPT JOB
+  ========================= */
+
+  function acceptJob() {
+
+    if (!partner.shopOnline) {
+
+      showToast(
+        "Turn your shop Online before accepting jobs."
+      );
+
+      return;
+    }
+
+    partner.jobAccepted = true;
+
+    document.getElementById("workerModal")
+      .classList.add("show");
+
+  }
+
+
+  /* =========================
+     REJECT JOB
+  ========================= */
+
+  function rejectJob() {
+
+    partner.jobAvailable = false;
+
+    document.getElementById("newJobCard")
+      .innerHTML = `
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            ✓
+          </div>
+
+          <strong>
+            Job rejected
+          </strong>
+
+          <p style="margin-top:7px;">
+            The booking has been declined.
+          </p>
+
+        </div>
+
+      `;
+
+    document.getElementById("jobCountText")
+      .textContent = "0 requests";
+
+    showToast(
+      "Job rejected. Looking for another partner."
+    );
+
+  }
+
+
+  /* =========================
+     ASSIGN WORKER
+  ========================= */
+
+  function assignWorker(workerName) {
+
+    partner.workerAssigned = true;
+
+    partner.workerName = workerName;
+
+    closeWorkerModal();
+
+    document.getElementById("newJobCard")
+      .innerHTML = `
+
+        <div class="job-top">
+
+          <div class="job-id">
+            Booking #CW-48321
+          </div>
+
+          <div class="new-badge">
+            ACCEPTED
+          </div>
+
+        </div>
+
+        <div class="vehicle-name">
+          Hyundai Creta
+        </div>
+
+        <div class="service-name">
+          Full Car Wash — ₹499
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">👷</span>
+
+          <span>
+            Worker assigned:<br>
+            <strong>${workerName}</strong>
+          </span>
+
+        </div>
+
+        <div class="job-detail">
+          <span class="job-detail-icon">📍</span>
+
+          <span>
+            24, Avinashi Road, Coimbatore
+          </span>
+
+        </div>
+
+        <button
+          class="primary-btn"
+          style="margin-top:16px;"
+          onclick="openActiveJob()">
+
+          View Active Job
+
+        </button>
+
+      `;
+
+    document.getElementById("jobCountText")
+      .textContent = "1 active";
+
+    showToast(
+      workerName + " assigned successfully."
+    );
+
+  }
+
+
+  /* =========================
+     WORKER MODAL
+     ========================= */
+
+  function closeWorkerModal() {
+
+    document
+      .getElementById("workerModal")
+      .classList.remove("show");
+
+  }
+
+
+  /* =========================
+     ACTIVE JOB
+     ========================= */
+
+  function openActiveJob() {
+
+    showScreen(
+      "activeScreen",
+      document.getElementById("navActive")
+    );
+
+  }
+
+
+  /* =========================
+     START WASHING
+     ========================= */
+
+  function startWash() {
+
+    if (!partner.workerAssigned) {
+
+      showToast(
+        "Assign a worker first."
+      );
+
+      return;
+    }
+
+    partner.washingStarted = true;
+
+    document
+      .getElementById("washingDot")
+      .classList.add("current");
+
+    document
+      .getElementById("onWayDot")
+      .classList.remove("current");
+
+    document
+      .getElementById("startWashBtn")
+      .style.display = "none";
+
+    document
+      .getElementById("completeBtn")
+      .style.display = "block";
+
+    showToast(
+      "Washing started."
+    );
+
+  }
+
+
+  /* =========================
+     COMPLETE JOB
+     ========================= */
+
+  function completeJob() {
+
+    partner.jobCompleted = true;
+
+    partner.completedJobs++;
+
+    partner.todayJobs++;
+
+    partner.todayEarnings += 499;
+
+    partner.monthlyEarnings += 499;
+
+
+    document
+      .getElementById("washingDot")
+      .classList.remove("current");
+
+    document
+      .getElementById("washingDot")
+      .classList.add("completed");
+
+    document
+      .getElementById("completeDot")
+      .classList.add("completed");
+
+
+    document
+      .getElementById("completeBtn")
+      .style.display = "none";
+
+
+    document
+      .getElementById("startWashBtn")
+      .style.display = "none";
+
+
+    document
+      .getElementById("todayJobs")
+      .textContent =
+      partner.todayJobs;
+
+
+    document
+      .getElementById("completedJobs")
+      .textContent =
+      partner.completedJobs;
+
+
+    document
+      .getElementById("todayEarnings")
+      .textContent =
+      "₹" + partner.todayEarnings;
+
+
+    document
+      .getElementById("monthlyEarnings")
+      .textContent =
+      "₹" + partner.monthlyEarnings;
+
+
+    showToast(
+      "Job completed! ₹499 added to earnings."
+    );
+
+
+    setTimeout(() => {
+
+      showScreen(
+        "earningsScreen",
+        document.getElementById("navEarnings")
+      );
+
+    }, 900);
+
+  }
+
+
+  /* =========================
+     LOGOUT
+     ========================= */
+
+  function logoutPartner() {
+
+    partner.loggedIn = false;
+
+    document.getElementById("bottomNav")
+      .style.display = "none";
+
+    document.getElementById("homeScreen")
+      .classList.remove("active");
+
+    document.getElementById("workersScreen")
+      .classList.remove("active");
+
+    document.getElementById("activeScreen")
+      .classList.remove("active");
+
+    document.getElementById("earningsScreen")
+      .classList.remove("active");
+
+    document.getElementById("profileScreen")
+      .classList.remove("active");
+
+    document.getElementById("loginScreen")
+      .style.display = "flex";
+
+    document.getElementById("phoneInput")
+      .value = "";
+
+    document.getElementById("passwordInput")
+      .value = "";
+
+    showToast("Logged out.");
+
+  }
+
+
+  /* =========================
+     TOAST
+     ========================= */
+
+  function showToast(message) {
+
+    const toast =
+      document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+
+      toast.classList.remove("show");
+
+    }, 2500);
+
+  }
+
+
+  /* =========================
+     PROFILE NAVIGATION
+     ========================= */
+
+  document.addEventListener(
+    "click",
+    function(event) {
+
+      const profile =
+        event.target.closest(".profile-circle");
+
+      if (profile) {
+
+        showScreen("profileScreen", null);
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
